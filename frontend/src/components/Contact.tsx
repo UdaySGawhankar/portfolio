@@ -11,7 +11,7 @@ export default function Contact() {
 
     try {
       // Replace with your actual Render API URL
-      const response = await fetch("https://portfolio-yeh1.onrender.com/contact", {
+      const response = await fetch("https://portfolio-api-1234.onrender.com/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
