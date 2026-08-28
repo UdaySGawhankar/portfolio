@@ -1,4 +1,36 @@
+"use client";
+import { useState } from "react";
+
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [buttonText, setButtonText] = useState("Send Message");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setButtonText("Sending...");
+
+    try {
+      // Replace with your actual Render API URL
+      const response = await fetch("https://portfolio-yeh1.onrender.com/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setButtonText("Message Sent!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setButtonText("Failed to send.");
+      }
+    } catch (error) {
+      setButtonText("Network Error.");
+    }
+    
+    // Reset button after 3 seconds
+    setTimeout(() => setButtonText("Send Message"), 3000);
+  };
+
   return (
     <section id="contact" className="py-24 px-8 md:px-24 bg-slate-950 text-slate-50">
       <div className="max-w-3xl mx-auto text-center">
@@ -7,53 +39,45 @@ export default function Contact() {
           Get In Touch
         </h2>
         <p className="text-slate-400 mb-12 leading-relaxed">
-          I am currently open to new opportunities in software development and data science. 
-          Whether you have a question, a project proposal, or just want to say hi, my inbox is open!
+          I am currently open to new opportunities. Whether you have a question or just want to say hi, my inbox is open!
         </p>
 
-        <form className="max-w-xl mx-auto text-left space-y-6">
+        <form onSubmit={handleSubmit} className="max-w-xl mx-auto text-left space-y-6">
           <div>
             <label htmlFor="name" className="block text-sm font-mono text-emerald-400 mb-2">Name</label>
             <input 
-              type="text" 
-              id="name" 
+              type="text" id="name" required
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
               className="w-full bg-slate-900 border border-slate-800 rounded-md p-3 text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
-              placeholder="Your Name"
             />
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-mono text-emerald-400 mb-2">Email</label>
             <input 
-              type="email" 
-              id="email" 
+              type="email" id="email" required
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
               className="w-full bg-slate-900 border border-slate-800 rounded-md p-3 text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
-              placeholder="hello@example.com"
             />
           </div>
           <div>
             <label htmlFor="message" className="block text-sm font-mono text-emerald-400 mb-2">Message</label>
             <textarea 
-              id="message" 
-              rows={5}
+              id="message" rows={5} required
+              value={formData.message}
+              onChange={(e) => setFormData({...formData, message: e.target.value})}
               className="w-full bg-slate-900 border border-slate-800 rounded-md p-3 text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
-              placeholder="Write your message here..."
             ></textarea>
           </div>
           <button 
-            type="button" 
-            className="w-full border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 font-bold py-3 px-8 rounded-md transition-colors"
+            type="submit" 
+            className="w-full border-2 border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 font-bold py-3 px-8 rounded-md transition-colors disabled:opacity-50"
+            disabled={buttonText !== "Send Message"}
           >
-            Send Message
+            {buttonText}
           </button>
         </form>
-
-        <footer className="mt-24 pt-8 border-t border-slate-800 text-slate-500 text-sm font-mono flex flex-col items-center">
-          <div className="flex gap-6 mb-4">
-            <a href="https://github.com/UdaySGawhankar" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">GitHub</a>
-            <a href="https://www.linkedin.com/in/uday-gawhankar-059836238" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">LinkedIn</a>
-          </div>
-          <p>Designed & Built by Uday Gawhankar</p>
-        </footer>
       </div>
     </section>
   );
