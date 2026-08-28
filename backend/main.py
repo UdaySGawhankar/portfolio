@@ -12,8 +12,8 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"], # Allows any domain to submit the form
+    allow_credentials=False, # Must be False when origins is "*"
     allow_methods=["*"],
     allow_headers=["*"],
 )
